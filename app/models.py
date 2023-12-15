@@ -37,6 +37,22 @@ class Customer(Base):
                f'firstName={self.first_name}' + \
                f"last_name={self.last_name}"
     
+#REVIEWS TABLE
+class Review(Base):
+    __tablename__ = 'reviews'
+
+    id = Column(Integer(), primary_key=True)
+    comments = Column(String())
+    star_rating = Column(Integer())
+
+    customer_id = Column(Integer(), ForeignKey('customers.id'))
+    restaurant_id = Column(Integer(), ForeignKey("restaurants.id"))
     
+    def __repr__(self):
+        return f'Review(id={self.id}' + \
+               f'comments={self.comments}' + \
+               f'star_rating={self.star_rating})'
+    
+
 
 
