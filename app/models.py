@@ -28,6 +28,14 @@ class Restaurant(Base):
         return f'Restauraunt(id={self.id})' + \
                f'name={self.name}' + \
                f'price={self.price}' 
+    #all reviews for restaurant
+    def reviews_for_restaurant(self):
+        return self.reviews
+    #customer who reviewed restaurant
+    def customer_who_reviewed(self):
+        return [review.customer for review in self.reviews]
+    
+    
     
 #Customer Table
 class Customer(Base):
@@ -45,6 +53,14 @@ class Customer(Base):
         return f'Customer(id={self.id})' + \
                f'firstName={self.first_name}' + \
                f"last_name={self.last_name}"
+    
+    #reviews by particular customer
+    def reviews_by_customer(self):
+        return self.reviews
+    
+    #restaurant particular customer has reviewed
+    def restaurant_by_customer(self):
+        return [review.restaurant for review in self.reviews]
     
 #REVIEWS TABLE
 class Review(Base):
@@ -64,6 +80,13 @@ class Review(Base):
         return f'Review(id={self.id}' + \
                f'comments={self.comments}' + \
                f'star_rating={self.star_rating})'
+    
+
+    def customer_reviewed_this(self):
+        return self.customer
+    
+    def restaurant_for_review(self):
+        return self.restaurant
     
 
 
