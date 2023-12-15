@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy import Column,Integer, String,ForeignKey
+from sqlalchemy.ext.associationproxy import association_proxy
 
 
 Base = declarative_base()
@@ -19,6 +20,10 @@ class Restaurant(Base):
     name = Column(String(50))
     price = Column(Integer())
 
+    reviews = relationship("Review", back_populates = 'restaurant')
+    customers = association_proxy('reviews', 'customer', 
+                creator = lambda cs:Review(customer = cs )                  )
+
     def __repr__(self):
         return f'Restauraunt(id={self.id})' + \
                f'name={self.name}' + \
@@ -31,6 +36,10 @@ class Customer(Base):
     id = Column(Integer(), primary_key=True)
     first_name = Column(String())
     last_name = Column(String())
+
+    reviews = relationship("Review", back_populates = 'customer')
+    restaurants = association_proxy('reviews', 'restaurant',
+                creator = lambda rs:Review(restaurant = rs))
 
     def __repr__(self):
         return f'Customer(id={self.id})' + \
@@ -47,6 +56,9 @@ class Review(Base):
 
     customer_id = Column(Integer(), ForeignKey('customers.id'))
     restaurant_id = Column(Integer(), ForeignKey("restaurants.id"))
+
+    customer = relationship("Customer", back_populates = 'reviews')
+    restaurant = relationship ('Restaurant', back_populates="reviews")
     
     def __repr__(self):
         return f'Review(id={self.id}' + \
